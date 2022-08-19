@@ -64,7 +64,7 @@ class Prato(Item):
     def __init__(self):
         super().__init__('assets/prato.png')
         self.processa_itens = True
-    
+     
     def pega(self):
         return self
 

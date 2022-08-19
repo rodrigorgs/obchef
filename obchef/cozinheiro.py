@@ -38,23 +38,47 @@ class Cozinheiro(pyglet.sprite.Sprite):
 
     def interage(self):
         if self.objeto_pego is None:
-            self.pega_prato()
+            self._pega_item()
         else:
-            self.larga_prato()
+            self._larga_item()
 
-    def larga_prato(self):
+    def _larga_item(self):
         # TODO: verifica se tem espaço para largar o prato
-        if self.objeto_pego is not None:
-            self.objeto_pego.scale = 1
-            self.cozinha.objetos.set_tile(self.target_x, self.target_y, self.objeto_pego)
-            self.objeto_pego = None
+        
+        # tomate na tabua: tomate.combina(tabua) => tomate cortado
+        # tomate no prato: tomate.pode_combinar(prato) => False
 
-    def pega_prato(self):
-        prato = self.cozinha.objetos.get_tile(self.target_x, self.target_y)
-        if isinstance(prato, Prato):
-            self.objeto_pego = prato
-            self.cozinha.objetos.set_tile(self.target_x, self.target_y, None)
-            prato.scale = 0.5
+        # tomate cortado no prato
+        # prato no tomate cortado
+        
+        item = self.objeto_pego
+        outro_item = self.cozinha.objetos.get_tile(self.target_x, self.target_y)
+        
+        if outro_item is None:
+            self.objeto_pego.scale = 1
+            self.objeto_pego = None
+            self.cozinha.objetos.set_tile(self.target_x, self.target_y, item)
+        else:
+            items = [item, outro_item]
+            processadores = [x for x in items if x.processa_itens]
+            if len(processadores) == 1:
+                processador = processadores[0]
+                a_processar = [x for x in items if x is not processador][0]
+
+                if processador.processa(a_processar):
+                    self.objeto_pego.scale = 1
+                    self.objeto_pego = None
+                    novo = processador.transforma(a_processar)
+                    self.cozinha.objetos.set_tile(self.target_x, self.target_y, novo)
+
+    def _pega_item(self):
+        item = self.cozinha.objetos.get_tile(self.target_x, self.target_y)
+        item_obtido = item.pega()
+        if item_obtido is not None:
+            self.objeto_pego = item_obtido
+            if item_obtido is item:
+                self.cozinha.objetos.set_tile(self.target_x, self.target_y, None)
+            item_obtido.scale = 0.5
     
     def draw(self):
         self.sprite.draw()

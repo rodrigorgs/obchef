@@ -1,7 +1,7 @@
+import pyglet
 from .tilemap import Tilemap
 from .cozinheiro import Cozinheiro
 from .itens import *
-import pyglet
 
 class Cozinha:
     TILE_SIZE = 60
@@ -22,12 +22,12 @@ class Cozinha:
         ]
         self.configura_mapa(self.tilemap, mapa)
         objetos = [
-            '  PP            ',
+            '  PP  aa        ',
             '                ',
             'T        T      ',
             '                ',
             't               ',
-            '                ',
+            't               ',
             '                ',
             '                ',
         ]
@@ -48,8 +48,10 @@ class Cozinha:
                     tilemap.set_tile(c, l, Tomate())
                 elif linha[c] == 'P':
                     tilemap.set_tile(c, l, Prato())
+                elif linha[c] == 'a':
+                    tilemap.set_tile(c, l, Alface())
 
-    # TODO: mover para cozinheiro
+
     def on_key_press(self, symbol, modifiers):
         dx, dy = 0, 0
         if symbol == pyglet.window.key.UP:

@@ -22,10 +22,10 @@ class Cozinha:
         ]
         self.configura_mapa(self.tilemap, mapa)
         objetos = [
-            '  PP  aa        ',
+            '  PP  aa  m     ',
             '                ',
-            'T        T      ',
-            '                ',
+            'T       Tqq     ',
+            'm               ',
             't               ',
             't               ',
             '                ',
@@ -50,6 +50,10 @@ class Cozinha:
                     tilemap.set_tile(c, l, Prato())
                 elif linha[c] == 'a':
                     tilemap.set_tile(c, l, Alface())
+                elif linha[c] == 'm':
+                    tilemap.set_tile(c, l, Massa())
+                elif linha[c] == 'q':
+                    tilemap.set_tile(c, l, Queijo())
 
 
     def on_key_press(self, symbol, modifiers):

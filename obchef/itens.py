@@ -79,6 +79,9 @@ class Prato(Item):
                 if AlfaceCortada in types and TomateCortado in types:
                     self.subitem = SaladaDeAlfaceComTomate()
                     return True
+                elif QueijoRalado in types and Massa in types:
+                    self.subitem = Burrito()
+                    return True
             
         return False
 
@@ -137,6 +140,52 @@ class AlfaceCortada(Item):
 class SaladaDeAlfaceComTomate(Item):
     def __init__(self):
         super().__init__('assets/salada-alface-tomate.png')
+
+    def pode_ser_transformado(self, processador):
+        return isinstance(processador, Prato)
+
+    def pega(self):
+        return self
+
+class Queijo(Item):
+    def __init__(self):
+        super().__init__('assets/queijo.png')
+    
+    def pode_ser_transformado(self, processador):
+        return isinstance(processador, TabuaDeCorte)
+
+    def transforma(self, outro_item):
+        if isinstance(outro_item, TabuaDeCorte):
+            return QueijoRalado()
+        else:
+            return self
+    
+    def pega(self):
+        return self
+
+class QueijoRalado(Item):
+    def __init__(self):
+        super().__init__('assets/queijo-ralado.png')
+
+    def pode_ser_transformado(self, processador):
+        return isinstance(processador, Prato)
+
+    def pega(self):
+        return self
+
+class Massa(Item):
+    def __init__(self):
+        super().__init__('assets/massa.png')
+
+    def pode_ser_transformado(self, processador):
+        return isinstance(processador, Prato)
+
+    def pega(self):
+        return self
+
+class Burrito(Item):
+    def __init__(self):
+        super().__init__('assets/burrito.png')
 
     def pode_ser_transformado(self, processador):
         return isinstance(processador, Prato)
